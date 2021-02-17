@@ -1,42 +1,139 @@
 import Vue from 'vue'
-import App from './App'
+import App from './App.vue'
 import router from './router'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
+import {
+    Button,
+    Input,
+    Table,
+    TableColumn,
+    Dialog,
+    Card,
+    Container,
+    Icon,
+    Select,
+    Form,
+    Tag,
+    Tree,
+    Pagination,
+    Badge,
+    Loading,
+    Message,
+    MessageBox,
+    Menu,
+    Tabs,
+    TabPane,
+    Breadcrumb,
+    BreadcrumbItem,
+    Dropdown,
+    Steps,
+    Step,
+    Tooltip,
+    Popover,
+    Collapse,
+    FormItem,
+    Checkbox,
+    Header,
+    DropdownMenu,
+    DropdownItem,
+    Aside,
+    Main,
+    MenuItem,
+    Submenu,
+    Option,
+    Col,
+    Row,
+    Upload,
+    Radio,
+    DatePicker,
+    RadioGroup,
+    CollapseItem,
+    Switch
+} from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
-// 前端请求默认发送到 https://localhost:8080/managebooks
+Vue.prototype.$ELEMENT = {size: 'small', zIndex: 3000};
+Vue.use(Switch);
+Vue.use(CollapseItem);
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(DatePicker);
+Vue.use(Upload);
+Vue.use(Row);
+Vue.use(Col);
+Vue.use(Option);
+Vue.use(Submenu);
+Vue.use(MenuItem);
+Vue.use(Header);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(Aside);
+Vue.use(Main);
+Vue.use(Checkbox);
+Vue.use(FormItem);
+Vue.use(Collapse);
+Vue.use(Popover);
+Vue.use(Menu);
+Vue.use(Tabs);
+Vue.use(TabPane);
+Vue.use(Breadcrumb);
+Vue.use(BreadcrumbItem);
+Vue.use(Dropdown);
+Vue.use(Steps);
+Vue.use(Step);
+Vue.use(Tooltip);
+Vue.use(Tree);
+Vue.use(Pagination);
+Vue.use(Badge);
+Vue.use(Loading);
+Vue.use(Button);
+Vue.use(Input);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(Dialog);
+Vue.use(Card);
+Vue.use(Container);
+Vue.use(Icon);
+Vue.use(Select);
+Vue.use(Form);
+Vue.use(Tag);
+Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$confirm = MessageBox.confirm
+
+import {postRequest} from "./utils/api";
+import {postKeyValueRequest} from "./utils/api";
+import {putRequest} from "./utils/api";
+import {deleteRequest} from "./utils/api";
+import {getRequest} from "./utils/api";
+import {initMenu} from "./utils/menus";
+import 'font-awesome/css/font-awesome.min.css'
 var axios = require('axios')
-axios.defaults.baseURL = 'https://localhost:8080/managebooks'
+axios.defaults.baseURL = 'https://localhost:8080/'
 // 全局注册，之后可在其他组件中通过 this.$axios 发送数据
-Vue.prototype.$axios = axios
-Vue.config.productionTip = false //阻止vue 在启动时生成生产提示。
 
-Vue.use(ElementUI)
-//创建一个 Vue 对象
+Vue.prototype.postRequest = postRequest;
+Vue.prototype.postKeyValueRequest = postKeyValueRequest;
+Vue.prototype.putRequest = putRequest;
+Vue.prototype.deleteRequest = deleteRequest;
+Vue.prototype.getRequest = getRequest;
 
+Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-      if (to.meta.requireAuth) {
-        if (store.state.user.username) {
-          next()
+    if (to.path == '/') {
+        next();
+    } else {
+        if (window.sessionStorage.getItem("user")) {
+            initMenu(router, store);
+            next();
         } else {
-          next({
-            path: 'login',
-            query: {redirect: to.fullPath}
-          })
+            next('/?redirect=' + to.path);
         }
-      } else {
-        next()
-      }
     }
-)
+})
 
 new Vue({
-  render: h => h(App),
-  router,
-  store
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')
-
-
-
