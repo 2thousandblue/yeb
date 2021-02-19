@@ -107,8 +107,9 @@ import {deleteRequest} from "./utils/api";
 import {getRequest} from "./utils/api";
 import {initMenu} from "./utils/menus";
 import 'font-awesome/css/font-awesome.min.css'
+
 var axios = require('axios')
-axios.defaults.baseURL = 'https://localhost:8080/'
+axios.defaults.baseURL = '/apis/'
 // 全局注册，之后可在其他组件中通过 this.$axios 发送数据
 
 Vue.prototype.postRequest = postRequest;
@@ -120,15 +121,16 @@ Vue.prototype.getRequest = getRequest;
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-    if (to.path == '/') {
-        next();
+    if (to.path === '/login' || window.localStorage.token){  //没有token,全部拦截,重定向到login,反之放行
+        console.log('1'+from.path+' '+to.path+' '+to.fullPath)
+        next()
     } else {
-        if (window.sessionStorage.getItem("user")) {
-            initMenu(router, store);
-            next();
-        } else {
-            next('/?redirect=' + to.path);
-        }
+        console.log('2'+from.path+' '+to.path+' '+to.fullPath)
+        next({
+            path: 'login',
+            query: {redirect: to.fullPath}
+        })
+
     }
 })
 

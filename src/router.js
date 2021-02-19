@@ -12,9 +12,13 @@ export default new Router({
     routes: [
         {
             path: '/',
+            name: 'Default',
+            redirect: '/home',
+            component: Home
+        }, {
+            path: '/login',
             name: 'Login',
             component: Login,
-            hidden: true
         }, {
             path: '/home',
             name: 'Home',
@@ -28,12 +32,10 @@ export default new Router({
                     path: '/chat',
                     name: '在线聊天',
                     component: FriendChat,
-                    hidden: true
                 }, {
                     path: '/hrinfo',
                     name: '个人中心',
                     component: HrInfo,
-                    hidden: true
                 }
             ]
         }, {
