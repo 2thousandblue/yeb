@@ -1,0 +1,70 @@
+---
+server:
+  ssl:
+    key-alias: myhttps
+    key-store: yeb-server\src\main\resources\myhttps
+    key-store-password: aile0223
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+    min-response-size: 1024
+spring:
+  redis:
+    database: 0
+    host: localhost
+    jedis:
+      pool:
+        max-idle: 8
+        max-active: 8
+        max-wait: -1ms
+        min-idle: 0
+  datasource:
+    name: test
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/yeb?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    hikari: #hikari连接池配置
+      minimum-idle: 5 #最小空闲连接数
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      # 连接池名称
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+#      initialization-mode: always
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  type-aliases-package: com.server.pojo
+  configuration:
+    map-underscore-to-camel-case: false
+
+##Mybatis SQL 打印 (方法接口所在的包,不是Mapper.xml所在包)
+logging:
+  level:
+    com.blue.server.mapper: debug
+
+jwt:
+  #存储的请求头
+  tokenHeader: Authorization
+  #加密密钥
+  secret: yeb-secret
+  #JWT过期时间60*60*24
+  expiration: 86400
+  #JWT荷载中拿到的key
+  tokenHead: Bearer
+
+
+
+
+---
